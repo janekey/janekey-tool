@@ -5,7 +5,7 @@ package com.janekey.algorithms.sort;
  * @author Jackey.
  * @param <E>
  */
-public abstract class Sorter<E extends Comparable<E>> {
+public abstract class BaseSorter<E extends Comparable<E>> {
 	
 	public abstract void sort(E[] array);
 	
