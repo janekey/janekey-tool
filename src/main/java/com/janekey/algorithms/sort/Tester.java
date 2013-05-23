@@ -8,11 +8,11 @@ public class Tester {
 	
 	public static void main(String[] args) {
 		
-//		test(new InsertSorter<Integer>());// 插入排序
-//		test(new BubbleSorter<Integer>());// 冒泡排序
-//		test(new SelectSorter<Integer>());// 选择排序
+		test(new InsertSorter<Integer>());// 插入排序
+		test(new BubbleSorter<Integer>());// 冒泡排序
+		test(new SelectSorter<Integer>());// 选择排序
 		test(new QuickSorter<Integer>());// 快速排序
-//		test(new ShellSorter<Integer>());// 希尔排序
+		test(new ShellSorter<Integer>());// 希尔排序
 		test(new MergeSorter<Integer>());// 归并排序
 
 //		displayArray(list);
@@ -20,11 +20,11 @@ public class Tester {
 	}
 	
 	public static void test(BaseSorter<Integer> sorter) {
-		int size = 2000000;
+		int size = 20000;
 		Integer[] list = new Integer[size];
         Random random = new Random();
 		for(int i = 0; i < size; i++) {
-			list[i] = random.nextInt(2000000);
+			list[i] = random.nextInt(20000);
 		}
 		
 		long startTime = Calendar.getInstance().getTimeInMillis();

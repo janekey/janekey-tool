@@ -2,7 +2,12 @@ package com.janekey.algorithms.sort;
 
 /**
  * 堆排序
+ * 堆结构：在起始数组为0时：
+ *      * 父节点i的左子节点位置(2*i+1)
+ *      * 父节点i的右子节点位置(2*i+2)
+ *      * 子节点i的父节点位置((i-1)/2)
  *
+ * 堆排序算法的过程：
  * User: Janekey(janekey.com)
  * Date: 13-5-21
  * Time: 上午12:20
@@ -15,6 +20,9 @@ public class HeapSorter<E extends Comparable<E>> extends BaseSorter<E> {
         heapSort(array);
     }
 
+    /**
+     * 从最后一个父节点开始依次构建最大堆
+     */
     private void buildMaxHeapify(E[] data) {
         int startIndex = getParentIndex(data.length - 1);
 
@@ -39,15 +47,13 @@ public class HeapSorter<E extends Comparable<E>> extends BaseSorter<E> {
         else if (right < heapSize && data[right].compareTo(data[largest]) > 0)
             largest = right;
 
-        // 发现原来的data[0]不是最大值
+        // 发现原来的data[index]不是最大值
         if (largest != index) {
             E temp = data[index];
             data[index] = data[largest];
             data[largest] = temp;
             maxHeapify(data, heapSize, largest);
         }
-
-
     }
 
     /**
