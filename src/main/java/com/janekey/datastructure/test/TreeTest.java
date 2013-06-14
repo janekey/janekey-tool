@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public class TreeTest {
 
-    @Test
+//    @Test
     public void rbTest() {
         int size = 10;
         int[] a = new int[size];
