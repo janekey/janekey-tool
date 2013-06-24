@@ -72,14 +72,14 @@ public class TreeMap<K, V> {
         // x不为空，不为根节点，并且父节点为红色
         while (x != null && x != root && x.parent.color == RED) {
             if (parentOf(x) == leftOf(parentOf(parentOf(x)))) { //父节点为祖父节点的左子节点
-                Entry<K,V> y = rightOf(parentOf(parentOf(x)));  //祖父节点的右子节点
-                if (colorOf(y) == RED) {
-                    setColor(parentOf(x), BLACK);
+                Entry<K,V> y = rightOf(parentOf(parentOf(x)));  //祖父节点的右子节点(叔父节点)
+                if (colorOf(y) == RED) {    //叔父节点为红色
+                    setColor(parentOf(x), BLACK);   //父节点、叔父节点重绘为黑色，祖父节点重绘为红色
                     setColor(y, BLACK);
                     setColor(parentOf(parentOf(x)), RED);
-                    x = parentOf(parentOf(x));
-                } else {
-                    if (x == rightOf(parentOf(x))) {
+                    x = parentOf(parentOf(x));  //从祖父节点再次开始递归
+                } else {    //叔父节点为黑色
+                    if (x == rightOf(parentOf(x))) {    //新节点为父节点的右子节点
                         x = parentOf(x);
                         rotateLeft(x);
                     }
@@ -88,7 +88,7 @@ public class TreeMap<K, V> {
                     rotateRight(parentOf(parentOf(x)));
                 }
             } else {    //父节点为祖父节点的右子节点
-                Entry<K,V> y = leftOf(parentOf(parentOf(x)));
+                Entry<K,V> y = leftOf(parentOf(parentOf(x)));   //祖父节点的左子节点(叔父节点)
                 if (colorOf(y) == RED) {
                     setColor(parentOf(x), BLACK);
                     setColor(y, BLACK);
@@ -129,7 +129,19 @@ public class TreeMap<K, V> {
         return (p == null ? null : p.right);
     }
 
-    /** From CLR */
+    /*********** 左旋转/右旋转 ************
+        +---+                           +---+
+        | P |                           | r |
+        +---+                           +---+
+             \     left rotation       /
+            +---+  ------------->  +---+
+            | r |  <-------------  | P |
+            +---+  right rotation  +---+
+            /                           \
+        +---+                             +---+
+        | C |                             | C |
+        +---+                             +---+
+    ********************************/
     private void rotateLeft(Entry<K,V> p) {
         if (p != null) {
             Entry<K,V> r = p.right;
@@ -148,7 +160,6 @@ public class TreeMap<K, V> {
         }
     }
 
-    /** From CLR */
     private void rotateRight(Entry<K,V> p) {
         if (p != null) {
             Entry<K,V> l = p.left;

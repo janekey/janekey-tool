@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<school>
+	<class>
+		<number>01</number>
+		<name>0801</name>
+		<stu_num>60</stu_num>
+	</class>
+	<class>
+		<number>02</number>
+		<name>0802</name>
+		<stu_num>58</stu_num>
+	</class>
+</school>
