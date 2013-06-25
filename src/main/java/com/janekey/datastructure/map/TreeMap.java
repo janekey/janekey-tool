@@ -48,6 +48,58 @@ public class TreeMap<K, V> {
         return (p == null ? null : p.value);
     }
 
+    public V remove(Object key) {
+        Entry<K, V> p = getEntry(key);
+        if (p == null)
+            return null;
+        V oldValue = p.value;
+        deleteEntry(p);
+        return oldValue;
+    }
+
+    private void deleteEntry(Entry<K,V> p) {
+        size--;
+
+        // 节点p左右子节点都不为空，
+        // 获取p大的第一个节点s，复制到p，然后p指向s，后面将其删除（s最多只有一个子节点）
+        if (p.left != null && p.right != null) {
+            Entry<K, V> s = successor(p);
+            p.key = s.key;
+            p.value = s.value;
+            p = s;
+        }
+
+        // 这时p最多只有一个子节点，作为替换的节点
+        Entry<K,V> replacement = (p.left != null ? p.left : p.right);
+        if (replacement != null) {
+
+        } else if (p.parent == null) {
+            root = null;
+        } else {//替换的节点没有子节点
+
+        }
+    }
+
+    // 返回树中比t大的第一个节点
+    private Entry<K, V> successor(Entry<K, V> t) {
+        if (t == null)
+            return null;
+        else if(t.right != null) {  //若t的右子树不为空
+            Entry<K, V> p = t.right;
+            while (p.left != null)
+                p = p.left;
+            return p;
+        } else {    //若t的右子树为空
+            Entry<K, V> p = t.parent;
+            Entry<K, V> ch = t;
+            while (p != null && ch == p.right) {
+                ch = p;
+                p = p.parent;
+            }
+            return p;
+        }
+    }
+
     @SuppressWarnings("unchecked")
     Entry<K, V> getEntry(Object key) {
         if (key == null)
