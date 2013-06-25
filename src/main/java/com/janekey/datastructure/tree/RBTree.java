@@ -1,202 +1,200 @@
 package com.janekey.datastructure.tree;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 红黑树
+ * 红黑树是一种自平衡二叉查找树。
+ * 它是高效的：可以再O(log n)时间内做查找，插入和删除，其中n是树中元素的数目。
+ * 红黑树的性质：
+ * 性质1. 节点是红色或黑色。
+ * 性质2. 根是黑色。
+ * 性质3. 所有叶子都是黑色（叶子是NIL节点）。
+ * 性质4. 每个红色节点的两个子节点都是黑色。(从每个叶子到根的所有路径上不能有两个连续的红色节点)
+ * 性质5. 从任一节点到其每个叶子的所有简单路径都包含相同数目的黑色节点。
+ * 以上这些约束产生了关键性质：从根到叶子的最长的可能路径不多于最短的可能路径的两倍长。
+ *
  * User: qi.zheng
  * Date: 13-5-23
  * Time: 下午2:14
  */
 public class RBTree {
 
-    TreeNode root;
+    private TreeNode root;
+    private int size;
+
     private static final boolean RED   = false;
     private static final boolean BLACK = true;
 
-    // 建立红黑树
-    public void create(int[] list) {
-        for (int i : list)
-            this.insert(i);
+    public void insert(int data) {
+        TreeNode t = root;
+        if (t == null) {
+            root = new TreeNode(data, null);
+            size = 1;
+            return;
+        }
+        TreeNode newNode = insert(data, root);
+        fixAfterInsertion(newNode);
+        size++;
     }
 
-    public void insert(int element) {
-        TreeNode node = new TreeNode(element);
-
-        // 判断根是否为空,如果为空,则将root指向新元素.否则,进入循环
-        if (root == null) {
-            root = node;
-            root.color = RED;
-            return;
+    private TreeNode insert(int data, TreeNode node) {
+        if (data < node.data) {
+            if (node.left != null)
+                return insert(data, node.left);
+            else
+                return (node.left = new TreeNode(data, node));
+        } else if (data > node.data) {
+            if (node.right != null)
+                return insert(data, node.right);
+            else
+                return (node.right = new TreeNode(data, node));
         } else {
-            // 定义四个指针,分别指向祖先,祖,父,自身
-            TreeNode p = root, q;
-            TreeNode parent = root;
-            TreeNode grand = root;
-            TreeNode ancestor = root;
-            while (p != null) {
-                // 如果P的左右孩子均不为空且颜色均为红色,则执行颜色转换并进行调整
-                if (p.left != null && p.right != null) {
-                    if (p.left.color == BLACK && p.right.color == BLACK) {
-                        // 注释说是红色，代码中是黑色？？？？
-                        convertColor(p);
-                        adjust(ancestor, grand, parent, p);
-                    }
-                }
-
-                if (element == p.data)
-                    return;
-
-                q = p;  // 指针依次向后移动
-                ancestor = grand;
-                grand = parent;
-                parent = p;
-
-                // 如果元素小于P
-                if (element < q.data) {
-                    // P的左孩子为空
-                    if (q.left == null) {
-                        // 将P的做孩子指向新建元素
-                        q.left = node;
-                        p = node;   // 调整
-                        adjust(ancestor, grand, parent, p);
-                        return;
-                    } else {
-                        // P向左下移动
-                        p = p.left;
-                    }
-                } else {
-                    if (element > q.data) {
-                        if (q.right == null) {
-                            // 将P的右孩子指向新建元素
-                            q.right = node;
-                            p = node;   // 调整
-                            adjust(ancestor, grand, parent, p);
-                            return;
-                        } else {
-                            // P向右下移动
-                            p = p.right;
-                        }
-                    }
-                }
-            }
+            return null;
         }
     }
 
-    // 是否存在黑黑冲突
-    public void adjust(TreeNode ancestor, TreeNode grand, TreeNode parent, TreeNode x) {
-        if (!(parent.color == BLACK && x.color == BLACK))
-            return;
-        // 符合一次调整的,将调用一次调整
-        if ((grand.left == parent && parent.left == x)
-                || (grand.right == parent && parent.right == x)) {
-            onceAdjust(ancestor, grand, parent, x);
-            return;
-        }
-        // 符合二次调整的,将调用二次调整
-        if ((grand.left == parent && parent.right == x)
-                || (grand.right == parent && parent.left == x)) {
-            twiceAdjust(ancestor, grand, parent, x);
-            return;
-        }
+    private TreeNode parentOf(TreeNode n) {
+        return n == null ? null : n.parent;
     }
 
-    // 调整父结点和祖结点的颜色
-    private void onceAdjust(TreeNode ancestor, TreeNode grand, TreeNode parent, TreeNode x) {
-        this.exchangeColor(grand);
-        this.exchangeColor(parent);
-        // 将祖先结点指向父结点
-        if (ancestor == grand && ancestor == this.root) {
-            this.root = parent;
-            ancestor = parent;
+    private TreeNode grandparentOf(TreeNode n) {
+        return parentOf(parentOf(n));
+    }
+
+    private TreeNode uncleOf(TreeNode n) {
+        if (grandparentOf(n) != null) {
+            if (parentOf(n) == grandparentOf(n).left)
+                return grandparentOf(n).right;
+            else
+                return grandparentOf(n).left;
         } else {
-            if (ancestor.left == grand) {
-                ancestor.left = parent;
-            } else if (ancestor.right == grand) {
-                ancestor.right = parent;
-            }
+            return null;
         }
 
-        // 左左型调整
-        if (grand.left == parent && parent.left == x) {
-            grand.left = parent.right;
-            parent.right = grand;
-            return;
-        }
+    }
 
-        // 右右型调整
-        if (grand.right == parent && parent.right == x) {
-            grand.right = parent.right;
-            parent.left = grand;
-            return;
+    private void fixAfterInsertion(TreeNode n) {
+        if (n != null ) {
+            n.color = RED;
+            insertCase1(n);
         }
     }
 
-    // 调整自身结点和祖结点的颜色
-    private void twiceAdjust(TreeNode ancestor, TreeNode grand, TreeNode parent, TreeNode x) {
-        this.exchangeColor(grand);
-        this.exchangeColor(x);
-        // 将祖先结点指向自身结点
-        if (ancestor == grand && ancestor == root) {
-            root = x;
-            ancestor = x;
+    /**
+     * 新节点N位于根节点上，没有父节点。
+     * 将N重绘为黑色。
+     */
+    private void insertCase1(TreeNode n) {
+        if (n.parent == null)   //根节点
+            root.color = BLACK;
+        else
+            insertCase2(n);
+    }
+
+    /**
+     * 新节点的父节点是黑色。
+     * 新节点是红色的，这时对新的树没有影响，5个性质都未受到威胁，任然成立。
+     */
+    private void insertCase2(TreeNode n) {
+        //父节点是黑色的话5个性质任然有效
+        if (n.parent.color == RED)
+            insertCase3(n);
+    }
+
+    /**
+     * 父节点P和叔父节点U都为红色。
+     * 这时将P和U两个节点重绘为黑色，并且祖父节点G重绘为红色。
+     * 这样性质1、3、5都能成立，不过这时有可能G为根节点，或者G的父节点为红色，不符合性质2或4。
+     * 这时将G视为新插入的节点，对其从情况1开始递归。
+     */
+    private void insertCase3(TreeNode n) {
+        if (uncleOf(n) != null && uncleOf(n).color == RED) {
+            n.parent.color = BLACK;
+            uncleOf(n).color = BLACK;
+            grandparentOf(n).color = RED;
+            insertCase1(grandparentOf(n));
         } else {
-            if (ancestor.left == grand) {
-                ancestor.left = x;
-            } else if (ancestor.right == grand) {
-                ancestor.right = x;
-            } else if (ancestor == root) {
-                ancestor = x;
-                root = x;
-            }
-        }
-
-        // 左右型调整
-        if (grand.left == parent && parent.right == x) {
-            grand.left = x.right;
-            parent.right = x.left;
-            x.left = parent;
-            x.right = grand;
-            return;
-        }
-
-        // 右左型调整
-        if (grand.right == parent && parent.left == x) {
-            grand.right = x.left;
-            parent.left = x.right;
-            x.left = grand;
-            x.right = parent;
-            return;
+            insertCase4(n);
         }
     }
 
-    // 变换颜色的方法
-    private void exchangeColor(TreeNode p) {
-        if (p.color == BLACK) {
-            p.color = RED;
+    /**
+     * 父节点P是红色而叔父节点U是黑色或缺少，并且N节点是P节点的右子节点而P又是G的左节点。
+     * 这种情况下对父节点P进行左旋转，然后以情况5处理节点P来解决失效的性质4。
+     */
+    private void insertCase4(TreeNode n) {
+        if (n == n.parent.right && n.parent == grandparentOf(n).left) {
+            rotateLeft(n.parent);
+            n = n.left;
+        } else if (n == n.parent.left && n.parent == grandparentOf(n).right) {
+            rotateRight(n.parent);
+            n = n.right;
+        }
+        insertCase5(n);
+    }
+
+    /**
+     * 父节点P是红色而叔父节点U是黑色或缺少，新节点N是其父节点P的左子节点，父节点P又是祖父节点G的左子节点。
+     * 这种情况下对祖父节点G进行右旋转，同时将G重绘为红色，P重绘为黑色。
+     */
+    private void insertCase5(TreeNode n) {
+        n.parent.color = BLACK;
+        grandparentOf(n).color = RED;
+        if (n == n.parent.left && n.parent == grandparentOf(n).left) {
+            rotateRight(grandparentOf(n));
         } else {
-            p.color = BLACK;
+            rotateLeft(grandparentOf(n));
         }
     }
 
-    // 调整颜色
-    public void convertColor(TreeNode p) {
-        // 将P的左右孩子的颜色均置为红
-        p.left.color = RED;
-        p.right.color = RED;
-        // 若P为根结点,则颜色仍为红,否则颜色置为黑
-        if (!p.equals(root)) {
-            p.color = BLACK;
-            return;
+    /*********** 左旋转/右旋转 ************
+     +---+                           +---+
+     | n |                           | r |
+     +---+                           +---+
+         \     left rotation       /
+         +---+  ------------->  +---+
+         | r |  <-------------  | n |
+         +---+  right rotation  +---+
+         /                           \
+     +---+                             +---+
+     | C |                             | C |
+     +---+                             +---+
+     ********************************/
+    private void rotateLeft(TreeNode n) {
+        if (n != null) {
+            TreeNode r = n.right;
+            n.right = r.left;
+            if (r.left != null)
+                r.left.parent = n;
+            r.parent = n.parent;
+            if (n.parent == null)
+                root = r;
+            else if (n.parent.left == n)
+                n.parent.left = r;
+            else
+                n.parent.right = r;
+            r.left = n;
+            n.parent = r;
         }
-        if (p.equals(root))
-            p.color = RED;
     }
 
-    public void inorder() {
-        System.out.println("root:" + root.data);
-        inorder(root);
+    private void rotateRight(TreeNode n) {
+        if (n != null) {
+            TreeNode l = n.left;
+            n.left = l.right;
+            if (l.right != null) l.right.parent = n;
+            l.parent = n.parent;
+            if (n.parent == null)
+                root = l;
+            else if (n.parent.right == n)
+                n.parent.right = l;
+            else n.parent.left = l;
+            l.right = n;
+            n.parent = l;
+        }
+    }
+
+    public int size() {
+        return size;
     }
 
     // 中序遍历
@@ -221,9 +219,11 @@ public class RBTree {
         boolean color = BLACK;
         TreeNode left = null;
         TreeNode right = null;
+        TreeNode parent;
 
-        TreeNode(int data) {
+        TreeNode(int data, TreeNode parent) {
             this.data = data;
+            this.parent = parent;
         }
     }
 
