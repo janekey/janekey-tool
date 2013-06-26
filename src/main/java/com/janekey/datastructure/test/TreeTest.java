@@ -23,9 +23,9 @@ public class TreeTest {
 
         RBTree tree = new RBTree();
         System.out.println(Arrays.toString(a));
-        tree.create(a);
-
-        tree.inorder();
+//        tree.create(a);
+//
+//        tree.inorder();
 
 
     }
