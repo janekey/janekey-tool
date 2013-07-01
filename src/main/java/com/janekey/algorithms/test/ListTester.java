@@ -9,6 +9,7 @@ import java.util.Random;
  */
 public class ListTester {
 
+    //反转链表（循环）
     public static Entry reverseCyc(Entry head) {
         if (head == null || head.next == null)
             return head;
@@ -26,6 +27,7 @@ public class ListTester {
         return pre;
     }
 
+    //反转链表（递归）
     static Entry newHead;
     public static Entry reverseRecursive(Entry head) {
         if (head == null || head.next == null) {
@@ -59,14 +61,8 @@ public class ListTester {
         // 循环方法
         Entry newHead1 = reverseCyc(pre);
         displayList(newHead1);
-
-        pre = null;
-        for (int i = 0; i < 10; i++) {
-            pre = new Entry(r.nextInt(10), pre);
-        }
-        displayList(pre);
         // 递归方法
-        reverseRecursive(pre);
+        reverseRecursive(newHead1);
         if (newHead != null) {
             Entry tmp = newHead;
             while (tmp != null) {
