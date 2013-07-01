@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class ListTester {
 
-    public static Entry ReverseCyc(Entry head) {
+    public static Entry reverseCyc(Entry head) {
         if (head == null || head.next == null)
             return head;
 
@@ -23,7 +23,20 @@ public class ListTester {
             pre = tmp;
         }
         head.next = null;
-        return next;
+        return pre;
+    }
+
+    static Entry newHead;
+    public static Entry reverseRecursive(Entry head) {
+        if (head == null || head.next == null) {
+            newHead = head;
+            return head;
+        } else {
+            Entry tmp = reverseRecursive(head.next);
+            tmp.next = head;
+            head.next = null;
+            return head;
+        }
     }
 
     static class Entry {
@@ -42,23 +55,35 @@ public class ListTester {
         for (int i = 0; i < 10; i++) {
             pre = new Entry(r.nextInt(10), pre);
         }
+        displayList(pre);
+        // 循环方法
+        Entry newHead1 = reverseCyc(pre);
+        displayList(newHead1);
 
-        if (pre != null) {
-            Entry tmp = pre;
-            while (tmp != null) {
-                System.out.print(tmp.value + "\t");
-                tmp = tmp.next;
-            }
+        pre = null;
+        for (int i = 0; i < 10; i++) {
+            pre = new Entry(r.nextInt(10), pre);
         }
-
-        System.out.println();
-        Entry newHead = ReverseCyc(pre);
+        displayList(pre);
+        // 递归方法
+        reverseRecursive(pre);
         if (newHead != null) {
             Entry tmp = newHead;
             while (tmp != null) {
                 System.out.print(tmp.value + "\t");
                 tmp = tmp.next;
             }
+        }
+    }
+
+    static void displayList(Entry head) {
+        if (head != null) {
+            Entry tmp = head;
+            while (tmp != null) {
+                System.out.print(tmp.value + "\t");
+                tmp = tmp.next;
+            }
+            System.out.println();
         }
     }
 
