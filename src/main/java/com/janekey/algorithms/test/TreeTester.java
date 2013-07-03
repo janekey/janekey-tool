@@ -10,6 +10,7 @@ import java.util.Queue;
  */
 public class TreeTester {
 
+    // 层次遍历
     static void levelorder(Tree t) {
         if (t == null)
             return;
@@ -25,6 +26,7 @@ public class TreeTester {
         }
     }
 
+    //先序遍历
     static void preorder(Tree t) {
         if (t == null) return;
         System.out.println(t.value);
@@ -32,6 +34,7 @@ public class TreeTester {
         preorder(t.right);
     }
 
+    //中序遍历
     static void inorder(Tree t) {
         if (t == null) return;
         inorder(t.left);
@@ -39,11 +42,31 @@ public class TreeTester {
         inorder(t.right);
     }
 
+    //后序遍历
     static void postorder(Tree t) {
         if (t == null) return;
         postorder(t.left);
         postorder(t.right);
         System.out.println(t.value);
+    }
+
+    int depthTree(Tree t) {
+        if (t == null)
+            return 0;
+        int leftDepth = depthTree(t.left);
+        int rightDepth = depthTree(t.right);
+        return 1 + ((leftDepth > rightDepth) ? leftDepth : rightDepth);
+    }
+    //判断是否是平衡二叉树
+    boolean isBalance(Tree t) {
+        if (t == null)
+            return true;
+        int leftDepth = depthTree(t.left);
+        int rightDepth = depthTree(t.right);
+        if (leftDepth - rightDepth > 1 || leftDepth - rightDepth < -1)
+            return false;
+        else
+            return isBalance(t.left) ^ isBalance(t.right);
     }
 
     static class Tree {
