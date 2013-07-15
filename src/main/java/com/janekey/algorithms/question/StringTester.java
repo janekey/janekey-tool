@@ -1,4 +1,4 @@
-package com.janekey.algorithms.test;
+package com.janekey.algorithms.question;
 
 import java.util.Arrays;
 import java.util.HashSet;
