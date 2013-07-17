@@ -9,6 +9,7 @@ import java.util.HashSet;
  * Time: 下午4:28
  */
 public class StringTester {
+    //字符串的所有排列组合
     static HashSet<String> list = new HashSet<String>();
     static void permutation(char[] str, int i) {
         if (i >= str.length) return;
@@ -30,6 +31,7 @@ public class StringTester {
         }
     }
 
+    // 字符串反转
     static String reverse(String str) {
         if (str == null || str.length() == 0)
             return "";
@@ -67,10 +69,27 @@ public class StringTester {
         }
     }
 
+    //查找字符串中第一个只出现一次的字符
+    static char findSingle(String str) {
+        if (str == null) return '\0';
+        char[] cs = str.toCharArray();
+        int[] count = new int[256];
+        for (char c : cs) {
+            count[c]++;
+        }
+        for (int i = 0; i < 256; i++) {
+            if (count[i] == 1) {
+                return (char)i;
+            }
+        }
+        return '\0';
+    }
+
     public static void main(String[] args) {
 //        testPermutation();
 //        testStrReverse();
-        ninenineMulti();
+//        ninenineMulti();
+        System.out.println(findSingle("abaccdeff"));
     }
 
 }

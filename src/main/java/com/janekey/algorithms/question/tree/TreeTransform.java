@@ -1,13 +1,14 @@
 package com.janekey.algorithms.question.tree;
 
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * User: qi.zheng
  * Date: 13-7-15
  * Time: 下午12:56
  */
-public class TreeToList {
+public class TreeTransform {
 
     public static void main(String[] args) {
 
@@ -18,6 +19,10 @@ public class TreeToList {
         }
         TraversalTree.inorder(root);
         System.out.println();
+
+//        mirror(root);
+//        mirrorCyc(root);
+//        TraversalTree.inorder(root);
 
         TreeNode head = root;
         while (head.left != null)
@@ -31,6 +36,34 @@ public class TreeToList {
         }
     }
 
+    //二叉树转镜像（左右子树对调）(递归)
+    static void mirror(TreeNode root) {
+        if (root == null) return;
+        TreeNode tmp = root.left;
+        root.left = root.right;
+        root.right = tmp;
+
+        mirror(root.left);
+        mirror(root.right);
+    }
+
+    //(循环)  (非递归的先序遍历也是这种方式：使用Stack，先放right)
+    static void mirrorCyc(TreeNode root) {
+        if (root == null) return;
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+
+        stack.push(root);
+        while (!stack.empty()) {
+            TreeNode n = stack.pop();
+            TreeNode tmp = n.left;
+            n.left = n.right;
+            n.right = tmp;
+            if (n.left != null) stack.push(n.left);
+            if (n.right != null) stack.push(n.right);
+        }
+    }
+
+    //二叉树转链表
     static void treeToList(TreeNode root) {
         if (root == null)
             return;

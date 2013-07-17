@@ -36,11 +36,11 @@ public class TreePath {
     public static void main(String[] args) {
         TreeNode root = new TreeNode(10);
         int expected = 22;
-        TreeToList.put(root, new TreeNode(7));
-        TreeToList.put(root, new TreeNode(12));
-        TreeToList.put(root, new TreeNode(5));
-        TreeToList.put(root, new TreeNode(0));
-        TreeToList.put(root, new TreeNode(8));
+        TreeTransform.put(root, new TreeNode(7));
+        TreeTransform.put(root, new TreeNode(12));
+        TreeTransform.put(root, new TreeNode(5));
+        TreeTransform.put(root, new TreeNode(0));
+        TreeTransform.put(root, new TreeNode(8));
 
         TraversalTree.inorder(root);
         System.out.println();
