@@ -17,12 +17,12 @@ public class InsertSorter<E extends Comparable<E>> extends BaseSorter<E> {
 //                    swap(array, j - 1, j);
 
         for (int i = 1; i < array.length; i++) {
-            E temp = array[i];
             int j = i;
-            for (; j > 0 && array[j - 1].compareTo(temp) > 0; j--) {
+            for (; j > 0 && array[j - 1].compareTo(array[i]) > 0; j--) {
                 array[j] = array[j - 1];
             }
-            array[j] = temp;
+            if (j != i)
+                array[j] = array[i];
         }
 
 
