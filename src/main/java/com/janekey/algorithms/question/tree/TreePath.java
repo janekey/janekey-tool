@@ -12,7 +12,7 @@ public class TreePath {
 
     static Stack<Integer> stack = new Stack<Integer>();
     static int sum;
-    //在树中找出 和为值expected的所有路径
+    //在树中找出 和为值expected的所有路径(也可以通过这个方法找出根到某节点的路劲)
     public static void treePath(TreeNode node, int expected) {
         if (node == null)
             return;
