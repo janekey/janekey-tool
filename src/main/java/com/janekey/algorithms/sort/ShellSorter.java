@@ -15,8 +15,7 @@ public class ShellSorter<E extends Comparable<E>> extends BaseSorter<E> {
             value = (value + 1) * 2 - 1;
 
         for (int n = value; n >= 1; n = (n + 1) / 2 - 1)
-            for (int i = 0; i < n; i++)
-                shellSort(array, n);
+            shellSort(array, n);
     }
 
     private void shellSort(E[] array, int n) {

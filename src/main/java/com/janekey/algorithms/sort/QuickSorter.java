@@ -22,39 +22,31 @@ public class QuickSorter<E extends Comparable<E>> extends BaseSorter<E> {
 			return;
 		int i = low;
 		int j = high;
-
-		int pivot = (low + high) / 2;
-
-		E temp = array[pivot];
-		array[pivot] = array[j];// 最右元素空出
+		E temp = array[low];
 
 		while (i != j) {
+            // 找到右边数第一个小于枢纽元素的元素
+            while (i < j && array[j].compareTo(temp) > 0)
+                j--;
+            if (i < j) {
+                array[i] = array[j];
+                i++;
+            }
+
 			// 找到左边数起第一个大于枢纽元素的元素
-			while (i < j && array[i].compareTo(temp) <= 0) {
+			while (i < j && array[i].compareTo(temp) <= 0)
 				i++;
-			}
 			if (i < j) {
 				array[j] = array[i];
 				j--;
-			}
-
-			// 找到右边数第一个小于枢纽元素的元素
-			while (i < j && array[j].compareTo(temp) > 0) {
-				j--;
-			}
-			if (i < j) {
-				array[i] = array[j];
-				i++;
 			}
 
 		}
 		// 枢纽元素移到正确位置
 		array[i] = temp;
 
-		pivot = i;
-
-		quickSort(array, low, pivot - 1);
-		quickSort(array, pivot + 1, high);
+		quickSort(array, low, i - 1);
+		quickSort(array, i + 1, high);
 
 	}
 }
