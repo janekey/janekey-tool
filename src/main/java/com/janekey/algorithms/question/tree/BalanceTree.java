@@ -25,7 +25,7 @@ public class BalanceTree {
         if (leftDepth - rightDepth > 1 || leftDepth - rightDepth < -1)
             return false;
         else
-            return isBalance(t.left) ^ isBalance(t.right);
+            return isBalance(t.left) && isBalance(t.right);
     }
 
 }

@@ -33,6 +33,22 @@ public class TreePath {
         stack.pop();
     }
 
+    /**
+     * 二叉树中两个节点的最近公共父节点
+     */
+    public static TreeNode findNearestPNode(TreeNode root, TreeNode a, TreeNode b) {
+        if (root == null)
+            return null;
+        if (root == a || root == b)
+            return root;
+
+        TreeNode leftNode = findNearestPNode(root.left, a, b);
+        TreeNode rightNode = findNearestPNode(root.right, a, b);
+        if (leftNode != null && rightNode != null)
+            return root;
+        return leftNode != null ? leftNode : rightNode;
+    }
+
     public static void main(String[] args) {
         TreeNode root = new TreeNode(10);
         int expected = 22;

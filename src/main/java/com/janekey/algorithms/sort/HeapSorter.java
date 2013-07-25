@@ -44,7 +44,7 @@ public class HeapSorter<E extends Comparable<E>> extends BaseSorter<E> {
         int largest = index;
         if (left < heapSize && data[left].compareTo(data[index]) > 0)
             largest = left;
-        else if (right < heapSize && data[right].compareTo(data[largest]) > 0)
+        if (right < heapSize && data[right].compareTo(data[largest]) > 0)
             largest = right;
 
         // 发现原来的data[index]不是最大值
