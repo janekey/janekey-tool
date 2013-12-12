@@ -1,4 +1,4 @@
-package com.janekey.net;
+package com.janekey.net.udp;
 
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;

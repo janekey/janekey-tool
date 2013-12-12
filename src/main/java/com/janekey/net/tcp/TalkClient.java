@@ -1,4 +1,4 @@
-package com.janekey.base.socket;
+package com.janekey.net.tcp;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
