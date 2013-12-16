@@ -16,9 +16,22 @@ public class SocketChannelClient {
         SocketChannel channel = SocketChannel.open();
         channel.connect(new InetSocketAddress("localhost", 8888));
 
-        ByteBuffer buffer = ByteBuffer.wrap("hello jackey1".getBytes());
+        ByteBuffer buffer = ByteBuffer.allocate(30);
+        buffer.put("hello I'm client".getBytes());
 
+        buffer.flip();
         channel.write(buffer);
+
+        buffer.clear();
+        int ret = channel.read(buffer);
+        if (ret == -1) {
+            System.out.println("no data");
+        } else {
+            buffer.flip();
+            while (buffer.hasRemaining())
+                System.out.print((char) buffer.get());
+            System.out.println();
+        }
 
         channel.close();
     }

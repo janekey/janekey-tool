@@ -18,10 +18,11 @@ public class SocketChannelServer {
         serverSocketChannel.socket().bind(new InetSocketAddress(8888));
 //        serverSocketChannel.configureBlocking(false);//no-block
 
-        while (true) {
+//        while (true) {    //for no-block
             SocketChannel socketChannel = serverSocketChannel.accept();
             if (socketChannel != null) {
                 ByteBuffer buffer = ByteBuffer.allocate(30);
+                //receive
                 int ret = socketChannel.read(buffer);
 
                 if (ret == -1) {
@@ -33,8 +34,15 @@ public class SocketChannelServer {
                         System.out.print((char) buffer.get());
                     System.out.println();
                 }
+
+                //send
+                buffer.clear();
+                buffer.put("i'm server".getBytes());
+                buffer.flip();
+                socketChannel.write(buffer);
+
                 socketChannel.close();
-            }
+//            }
 
         }
 
