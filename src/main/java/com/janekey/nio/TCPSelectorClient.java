@@ -7,7 +7,6 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
-import java.util.Set;
 
 /**
  * User: jackeyzheng
@@ -17,70 +16,58 @@ import java.util.Set;
 public class TCPSelectorClient {
 
     public static void main(String[] args) throws IOException {
-        SocketChannel channel = SocketChannel.open();
-        channel.connect(new InetSocketAddress("localhost", 8888));
+        SocketChannel channel = SocketChannel.open();//获取Socket通道
+        channel.configureBlocking(false);//设为非阻塞
+        channel.connect(new InetSocketAddress("localhost", 8888));//在获取注册的事件后，channel.finishConnect()才能完成连接
 
-        Selector selector = Selector.open();
-        channel.configureBlocking(false);
-        channel.register(selector, SelectionKey.OP_CONNECT | SelectionKey.OP_WRITE | SelectionKey.OP_READ);
+        Selector selector = Selector.open();//获得通道的多路复用器(通道管理器)
+
+        channel.register(selector, SelectionKey.OP_CONNECT);
 
         boolean done = false, write = false;
         while (!done) {
-            int readChannels = selector.select(200);
+            int readChannels = selector.select(200);//非阻塞，通过上面的while轮询
             if (readChannels == 0) {
                 System.out.println("continue");
                 continue;
             }
 
-            Set selectedKeys = selector.selectedKeys();
-            Iterator keyIterator = selectedKeys.iterator();
+            Iterator keyIterator = selector.selectedKeys().iterator();
             while (keyIterator.hasNext()) {
                 SelectionKey key = (SelectionKey) keyIterator.next();
                 keyIterator.remove();
 
                 if (key.isConnectable() && !channel.isConnected()) {
-//                    boolean success =
-//                    if (!success) channel.finishConnect();
-                }
-                if (key.isWritable() && !write) {
+                    SocketChannel c = (SocketChannel) key.channel();
+                    if (c.isConnectionPending()) c.finishConnect();
+
+                    c.register(selector, SelectionKey.OP_WRITE);//注册为写事件，准备向服务端发送数据
+                } else if (key.isWritable() && !write) {
+                    SocketChannel c = (SocketChannel) key.channel();
+
                     ByteBuffer buffer = ByteBuffer.allocate(1024);
-                    buffer.put("I'm client".getBytes());
+                    buffer.put("Hi, I'm client".getBytes());
                     buffer.flip();
-                    channel.write(buffer);
+                    c.write(buffer);
                     write = true;
-                }
-                if (key.isReadable() && write) {
+
+                    c.register(selector, SelectionKey.OP_READ);//注册为读事件，准备从服务端接收数据
+                } else if (key.isReadable() && write) {
+                    SocketChannel c = (SocketChannel) key.channel();
+
                     ByteBuffer buffer = ByteBuffer.allocate(1024);
-                    int ret = channel.read(buffer);
+                    int ret = c.read(buffer);
                     if (ret == -1) {
-                        System.out.println("server no data");
+                        System.out.println("no data");
                     } else {
                         buffer.flip();
                         while (buffer.hasRemaining())
                             System.out.print((char) buffer.get());
                         System.out.println();
                     }
-                    channel.close();
+                    c.close();
                     done = true;
                 }
-
-//                if (key.isAcceptable()) {
-//                    System.out.println("accept");
-//                } else if (key.isConnectable()) {
-//                    System.out.println("connect");
-//                } else if (key.isReadable()) {
-//                    System.out.println("read");
-//                } else if (key.isWritable()) {
-//                    channel = (SocketChannel) key.channel();
-//
-//                    //write
-//                    ByteBuffer buffer = ByteBuffer.allocate(1024);
-//                    buffer.put("I'm client".getBytes());
-//                    buffer.flip();
-//                    channel.write(buffer);
-//
-//                    key.interestOps(SelectionKey.OP_READ);
-//                }
             }
         }
     }

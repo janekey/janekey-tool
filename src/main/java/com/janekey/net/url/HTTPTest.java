@@ -10,12 +10,11 @@ import java.net.URL;
  * Date: 13-12-12
  * Time: 上午11:30
  */
-public class URLTest {
+public class HTTPTest {
 
     public static void main(String[] args) {
         try {
             URL url = new URL("http://book.qq.com");
-//            InputStream is2 = url.openStream();//和下面一样(就是通过下面的代码实现的)
             InputStream is = url.openConnection().getInputStream();
             byte[] buffer = new byte[is.available()];
             if (is.read(buffer) != -1) {

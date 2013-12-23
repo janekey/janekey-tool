@@ -19,20 +19,20 @@ public class DatagramChannelClient {
         //send
         ByteBuffer buffer = ByteBuffer.wrap("hello I'm client".getBytes());
         channel.write(buffer);
-
-        //receive
-        buffer.clear();
-        int ret = channel.read(buffer);
-        if (ret == -1) {
-            System.out.println("no data");
-        } else {
-            buffer.flip();
-            while (buffer.hasRemaining())
-                System.out.print((char) buffer.get());
-            System.out.println();
-        }
-
         channel.close();
+        //receive
+//        buffer.clear();
+//        int ret = channel.read(buffer);
+//        if (ret == -1) {
+//            System.out.println("no data");
+//        } else {
+//            buffer.flip();
+//            while (buffer.hasRemaining())
+//                System.out.print((char) buffer.get());
+//            System.out.println();
+//        }
+//
+//        channel.close();
     }
 
 }
