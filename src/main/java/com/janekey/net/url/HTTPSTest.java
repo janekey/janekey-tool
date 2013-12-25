@@ -22,12 +22,12 @@ public class HTTPSTest {
 
         login();
 
-//        String urlString2 = "https://mp.weixin.qq.com/cgi-bin/contactmanage?t=user/index&pagesize=10&pageidx=0&type=0&token=1922582543&lang=zh_CN";
+//        String urlString2 = "https://mp.weixin.qq.com/cgi-bin/contactmanage?t=user/index&pagesize=10&pageidx=0&type=0&token=1444129884&lang=zh_CN";
 //        get(urlString2, referer);
 
         String urlString = "https://mp.weixin.qq.com/cgi-bin/masssend";
-        String ref = "https://mp.weixin.qq.com/cgi-bin/masssendpage?t=mass/send&token=1922582543&lang=zh_CN";
-        String data = "type=1&content=测试&sex=0&groupid=-1&synctxweibo=0&synctxnews=0&country=&province=&city=&imgcode=&token=1922582543&lang=zh_CN&random=0.527283979812637&f=json&ajax=1&t=ajax-response";
+        String ref = "https://mp.weixin.qq.com/cgi-bin/masssendpage?t=mass/send&token=1444129884&lang=zh_CN";
+        String data = "type=1&content=测试new&sex=0&groupid=-1&synctxweibo=0&synctxnews=0&country=&province=&city=&imgcode=&token=1444129884&lang=zh_CN&random=0.527283979812637&f=json&ajax=1&t=ajax-response";
         post(urlString, ref, data);
     }
 
@@ -104,6 +104,15 @@ public class HTTPSTest {
         connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
         connection.setRequestProperty("X-Requested-With", "XMLHttpRequest");
 
+        StringBuilder cookie = new StringBuilder();
+        Iterator<String> cookieIt = cookieList.iterator();
+        while (cookieIt.hasNext()) {
+            cookie.append(cookieIt.next());
+            if (cookieIt.hasNext())
+                cookie.append("; ");
+        }
+        connection.setRequestProperty("Cookie", cookie.toString());
+
         OutputStream outputStream = connection.getOutputStream();
         OutputStreamWriter writer = new OutputStreamWriter(outputStream, "UTF-8");
         writer.write(data);
@@ -119,4 +128,31 @@ public class HTTPSTest {
         is.close();
         System.out.println("===================Post Result=======================");
     }
+
+//HeadersPreviewResponse
+//Request URL:https://mp.weixin.qq.com/cgi-bin/masssend
+//Request Headersview source
+//Accept:text/html, */*; q=0.01
+//Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+//Origin:https://mp.weixin.qq.com
+//Referer:https://mp.weixin.qq.com/cgi-bin/masssendpage?t=mass/send&token=2064828871&lang=zh_CN
+//User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/31.0.1650.63 Safari/537.36
+//X-Requested-With:XMLHttpRequest
+//Form Dataview sourceview URL encoded
+//type:1
+//content:测试
+//sex:0
+//groupid:-1
+//synctxweibo:0
+//synctxnews:0
+//country:
+//province:
+//city:
+//imgcode:
+//token:2064828871
+//lang:zh_CN
+//random:0.527283979812637
+//f:json
+//ajax:1
+//t:ajax-response
 }
