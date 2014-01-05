@@ -22,7 +22,6 @@ public class ConcurrencyBase {
                 //当前线程睡眠5秒
                 Thread.sleep(5000);
                 synchronized (obj) {
-                    // 锁定对象，其他线程调用锁定对象的notify或notifyAll方法前，当前线程等待状态
                     obj.notify();
                 }
             } catch (InterruptedException e) {
@@ -41,6 +40,7 @@ public class ConcurrencyBase {
             System.out.println("ClassB wait");
             try {
                 synchronized(obj) {
+                    // 锁定对象，其他线程调用锁定对象的notify或notifyAll方法前，当前线程等待状态
                     obj.wait();
                 }
             } catch (InterruptedException e) {

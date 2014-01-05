@@ -31,7 +31,7 @@ public class HTTPTest {
 //        String data = "type=1&content=测试new&sex=0&groupid=-1&synctxweibo=0&synctxnews=0&country=&province=&city=&imgcode=&token=1444129884&lang=zh_CN&random=0.527283979812637&f=json&ajax=1&t=ajax-response";
 //        post(urlString, ref, data);
 
-        String token = "zXqDHoYmaAxyAzlpoW7QTS63CjI1b7zUJ_fWCyYdS8pDT6uTmVbdiEdQS8xOVzTJ-cp1S2Yw9lQ9T-0lB5pse5388-B4Gw0P_cnUQaFPT2yc9ZQPEq1tTxC3S-Xm0KP-119Fb-JVaexHwRQ4Vhy2KA";
+        String token = "WDk2fDLcMe_hz63v5iCwM9rZCX6RM1w3vvHmiaBCn2rQ6zmM6xXV6_oX_LpOUB7E8nfT0_89DGQ0BM3UTLIcIwAmTJLWwsCsLlYlBMMMyuUTmoufCD_YPfirkzzMePA9WEFGWL_MhNrmy7hKn-ltgQ";
 
 //        //add menu
 //        String addMenuUrl = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + token;
@@ -47,7 +47,7 @@ public class HTTPTest {
         String data = "{\"touser\":\"og7HvjoWTis3Iz5H1K_g2x11Xm_M\",\"msgtype\":\"text\"," +
                         "\"text\":" +
                         "{\"content\":\"" +
-                "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7fffd1090e0fac65&redirect_uri=http://dev3.3g.book.qq.com/view&response_type=code&scope=snsapi_base&state=jackey#wechat_redirect" +
+                "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx7fffd1090e0fac65&redirect_uri=http://wei.janekey.com&response_type=code&scope=snsapi_base&state=jackey#wechat_redirect" +
                 "\"}}";
         post(kfPostUrl, referer, data);
     }
