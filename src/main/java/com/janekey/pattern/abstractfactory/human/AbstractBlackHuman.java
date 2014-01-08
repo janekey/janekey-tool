@@ -1,11 +1,11 @@
-package com.janekey.pattern.factoryMethod;
+package com.janekey.pattern.abstractfactory.human;
 
 /**
- * User: Administrator
- * Date: 13-7-14
- * Time: 下午6:27
+ * User: jackeyzheng
+ * Date: 14-1-8
+ * Time: 下午5:18
  */
-public class BlackHuman implements Human {
+public abstract class AbstractBlackHuman implements Human {
     @Override
     public void laugh() {
         System.out.println("黑种人会笑");

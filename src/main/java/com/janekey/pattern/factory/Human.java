@@ -1,4 +1,4 @@
-package com.janekey.pattern.factoryMethod;
+package com.janekey.pattern.factory;
 
 /**
  * User: Administrator
