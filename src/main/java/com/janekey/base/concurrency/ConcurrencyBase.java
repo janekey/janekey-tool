@@ -51,12 +51,15 @@ public class ConcurrencyBase {
     }
 
     public static void main(String[] args) {
+        //一、继承Runnable接口方式
         Thread thread1 = new Thread(new ClassA());
         thread1.start();
 
+        //二、继承Thread类方式
         Thread thread2 = new ClassB();
         thread2.start();
 
+        //三、匿名类方式
         Thread thread3 = new Thread() {
             @Override
             public void run() {
