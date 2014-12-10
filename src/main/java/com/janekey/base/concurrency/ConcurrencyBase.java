@@ -1,7 +1,6 @@
 package com.janekey.base.concurrency;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 /**
  * User: Administrator
@@ -49,10 +48,11 @@ public class ConcurrencyBase {
             System.out.println("ClassB wake up");
         }
     }
-
+    static Thread t ;
     public static void main(String[] args) {
         //一、继承Runnable接口方式
         Thread thread1 = new Thread(new ClassA());
+        t = thread1;
         thread1.start();
 
         //二、继承Thread类方式
@@ -63,16 +63,35 @@ public class ConcurrencyBase {
         Thread thread3 = new Thread() {
             @Override
             public void run() {
+                try {
+                    //Java 5/6的sleep风格,不用Thread.sleep()
+                    TimeUnit.MILLISECONDS.sleep(100);
+
+                    //设置优先级，JDK默认有10级，不过实际各系统的级别不一样。Windows有7级、Solaris有23级。
+                    // 建议使用MIN_PRIORITY、NORM_PRIORITY、MAX_PRIORITY
+                    Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
+
+                    //暂停当前线程对象，并执行其他线程
+                    Thread.yield();
+
+                    //等待t线程结束
+                    t.join();
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 System.out.println("Here is a new thread from inner class");
+                throw new RuntimeException("test");
             }
         };
+        //捕获线程中的异常
+        thread3.setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread t, Throwable e) {
+                System.out.println("caught:" + e);
+            }
+        });
         thread3.start();
-
-        //使用Executor能更好的管理线程，还可以当线程执行完返回值
-//        ExecutorService exec = Executors.newCachedThreadPool();
-//        for (int i = 0; i < 5; i++)
-//            exec.execute(new ClassA());
-//        exec.shutdown();
     }
 
 }

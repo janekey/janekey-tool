@@ -1,7 +1,6 @@
 package com.janekey.base.concurrency;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 /**
  * User: p_qizheng
@@ -37,9 +36,19 @@ public class ThreadPool {
          */
         ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        for (int i = 0; i < 100; i++) {
-            Task task = new Task(i);
-            executorService.execute(task);
+//        for (int i = 0; i < 100; i++) {
+//            Task task = new Task(i);
+//            executorService.execute(task);
+//        }
+
+        Future<String> future = executorService.submit(new TaskWithResult());
+        try {
+            String result = future.get();
+            System.out.println(result);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
         executorService.shutdown();
     }
@@ -52,6 +61,13 @@ public class ThreadPool {
         @Override
         public void run() {
             System.out.println("tag:" + tag);
+        }
+    }
+
+    static class TaskWithResult implements Callable<String> {
+        @Override
+        public String call() throws Exception {
+            return "result";
         }
     }
 
