@@ -20,7 +20,7 @@ public class ThreadPool {
          * corePoolSize:0|maximumPoolSize:MAX_VALUE|keepAliveTime:60s|任务队列:SynchronousQueue
          * 新任务提交后，创建新线程处理任务，无上限
          */
-//        ExecutorService executorService = Executors.newCachedThreadPool();
+        ExecutorService executorService = Executors.newCachedThreadPool();
 
         /**
          * 【FixedThreadPool固定大小线程池】
@@ -34,13 +34,25 @@ public class ThreadPool {
          * corePoolSize:1|maximumPoolSize:1|keepAliveTime:0|任务队列:LinkedBlockingQueue
          * 单个线程执行任务，前面任务为完成，后面任务紧队列排队，队列无上线
          */
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
+//        ExecutorService executorService = Executors.newSingleThreadExecutor();
 
 //        for (int i = 0; i < 100; i++) {
 //            Task task = new Task(i);
 //            executorService.execute(task);
 //        }
 
+        for (int i = 0; i < 10; i++) {
+            Future<String> future = executorService.submit(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    while (true) {
+                        TimeUnit.SECONDS.sleep(5);
+                        Thread.yield();
+                    }
+//                    return null;
+                }
+            });
+        }
         Future<String> future = executorService.submit(new TaskWithResult());
         try {
             String result = future.get();
@@ -67,6 +79,7 @@ public class ThreadPool {
     static class TaskWithResult implements Callable<String> {
         @Override
         public String call() throws Exception {
+            //逻辑
             return "result";
         }
     }
