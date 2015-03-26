@@ -1,6 +1,7 @@
 package com.janekey.datastructure.map;
 
 /**
+ * 基于红黑树的实现
  * User: qi.zheng
  * Date: 13-6-21
  * Time: 下午3:37

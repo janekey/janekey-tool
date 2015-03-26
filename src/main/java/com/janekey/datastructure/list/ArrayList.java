@@ -30,6 +30,11 @@ public class ArrayList<E> {
         return oldValue;
     }
 
+    public void add(E element) {
+        ensureCapacity(size + 1);
+        elementData[size++] = element;
+    }
+
     public void add(int index, E element) {
         if (index > size || index < 0)
             throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
